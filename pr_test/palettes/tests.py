@@ -15,11 +15,27 @@ class TestPalette(TestCase):
 
     def test_palette_create(self):
         request = self.factory.post(
-            "/api/palettes/", {"name": "test", "colors": '["#000000"]'}
+            "/api/palettes/", {"name": "test", "colors": ["#000000"]}
         )
         force_authenticate(request, user=self.user)
         response = PaletteViewSet.as_view({"post": "create"})(request)
         self.assertEqual(response.status_code, 201)
+
+    def test_palette_create_invalid_colors_too_short(self):
+        request = self.factory.post(
+            "/api/palettes/", {"name": "test", "colors": ["#00000"]}
+        )
+        force_authenticate(request, user=self.user)
+        response = PaletteViewSet.as_view({"post": "create"})(request)
+        self.assertEqual(response.status_code, 400)
+
+    def test_palette_create_invalid_colors_string(self):
+        request = self.factory.post(
+            "/api/palettes/", {"name": "test", "colors": ["itsastring"]}
+        )
+        force_authenticate(request, user=self.user)
+        response = PaletteViewSet.as_view({"post": "create"})(request)
+        self.assertEqual(response.status_code, 400)
 
     def test_empty_palette_list(self):
         request = self.factory.get("/api/palettes/")
