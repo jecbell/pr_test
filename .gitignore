@@ -279,3 +279,4 @@ pr_test/media/
 .env
 .envs/*
 !.envs/.local/
+.vscode/settings.json
