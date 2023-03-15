@@ -43,3 +43,11 @@ class TeamTestCase(TestCase):
         response = TeamViewSet.as_view({"get": "list"})(request)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, [])
+
+    def test_team_join(self):
+        team = Team.objects.create()
+        request = self.factory.post(f"/api/teams/{team.id}/join/")
+        force_authenticate(request, user=self.user)
+        response = TeamViewSet.as_view({"post": "join"})(request, pk=team.id)
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(self.user.teams.count(), 1)
