@@ -1,6 +1,7 @@
 from django.conf import settings
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
+from pr_test.palettes.api.views import PaletteViewSet
 from pr_test.users.api.views import UserViewSet
 
 if settings.DEBUG:
@@ -9,6 +10,7 @@ else:
     router = SimpleRouter()
 
 router.register("users", UserViewSet)
+router.register("palettes", PaletteViewSet)
 
 
 app_name = "api"
